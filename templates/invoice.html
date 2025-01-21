@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+{% block title %}Generate New Invoice{% endblock %}
+{% set active_page = "invoice" %}
+
+{% block content %}
+    <h3>Generate a New Invoice</h3>
+    <p>Use the form below to generate a new invoice.</p>
+
+    <form action="/generate_invoice/" method="POST">
+        <div class="row g-4">
+            <!-- Customer Details Section -->
+            <section class="col-md-4">
+                <label for="customer" class="form-label">Customer</label>
+                <select class="form-select" id="customer" name="customer" onchange="updateCustomerDetails()" required>
+                    <option value="" selected disabled>Select a customer</option>
+                    {% for customer in customers %}
+                        <option value="{{ customer.customer_id }}" 
+                                data-address="{{ customer.address }}" 
+                                data-city="{{ customer.city }}" 
+                                data-country="{{ customer.country }}" 
+                                data-postalcode="{{ customer.postal_code }}">
+                            {{ customer.name }}
+                        </option>
+                    {% endfor %}
+                </select>
+
+                <div class="mt-3">
+                    <label for="address" class="form-label">Address</label>
+                    <input type="text" class="form-control" id="address" name="address" readonly>
+                </div>
+
+                <div class="mt-3">
+                    <label for="city" class="form-label">City</label>
+                    <input type="text" class="form-control" id="city" name="city" readonly>
+                </div>
+
+                <div class="mt-3">
+                    <label for="country" class="form-label">Country</label>
+                    <input type="text" class="form-control" id="country" name="country" readonly>
+                </div>
+
+                <div class="mt-3">
+                    <label for="postal_code" class="form-label">Postal Code</label>
+                    <input type="text" class="form-control" id="postal_code" name="postal_code" readonly>
+                </div>
+            </section>
+
+            <!-- Album Selection Section -->
+            <section class="col-md-8">
+                <label for="albums" class="form-label">Select Albums</label>
+                <div class="border p-3 rounded" style="max-height: 360px; overflow-y: auto;">
+                    <table class="table table-borderless mb-0">
+                        <thead>
+                            <tr>
+                                <th class="text-center">Album Title</th>
+                                <th class="text-end">Artist Name</th>
+                                <th class="text-end">Price</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for album in albums %}
+                                <tr>
+                                    <td>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="album_{{ album.album_id }}" name="albums" value="{{ album.album_id }}">
+                                            <label class="form-check-label" for="album_{{ album.album_id }}">
+                                                {{ album.title }}
+                                            </label>
+                                        </div>
+                                    </td>
+                                    <td class="text-end">{{ album.artist }}</td>
+                                    <td class="text-end">£{{ album.price }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <small class="form-text text-muted">Select the albums to include in the invoice. Scroll to see more albums.</small>
+            </section>
+        </div>
+
+        <button type="submit" class="btn btn-primary mt-3">Submit</button>
+    </form>
+
+    <script>
+        function updateCustomerDetails() {
+            const customerSelect = document.getElementById('customer');
+            const selectedOption = customerSelect.options[customerSelect.selectedIndex];
+
+            document.getElementById('address').value = selectedOption.dataset.address || '';
+            document.getElementById('city').value = selectedOption.dataset.city || '';
+            document.getElementById('country').value = selectedOption.dataset.country || '';
+            document.getElementById('postal_code').value = selectedOption.dataset.postalcode || '';
+        }
+    </script>
+{% endblock %}

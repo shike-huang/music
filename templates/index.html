@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block title %}Home Page{% endblock %}
+{% set active_page = "index" %}
+
+{% block content %}
+  <div class="container my-5">
+    <div class="row align-items-center">
+      <div class="col-md-6">
+        <img src="{{ url_for('static', filename='img/cover.jpeg') }}" class="img-fluid" alt="iMusic Cover Image">
+      </div>
+      <div class="col-md-6">
+        <div class="p-4 bg-light rounded">
+          <h1 class="display-4">Welcome to the iMusic Customer Management System (CMS)</h1>
+          <hr class="my-4">
+          <p class="text-danger">
+            The system is under active development!<br>
+            Things might be a little unstable!
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

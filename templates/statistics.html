@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% block title %}Price Statistics{% endblock %}
+{% set active_page = "statistics" %}
+
+{% block content %}
+  <h1 class="mb-4">Customer Statistics</h1>
+  
+  <div class="alert alert-info" role="alert">
+    <p>
+      View the statistics of customers in a selected country. Choose a country from the dropdown below and click 
+      <strong>Submit</strong> to display the statistics.
+    </p>
+  </div>
+
+  <form action="/statistics/" method="POST" class="needs-validation" novalidate>
+    <div class="mb-3">
+      <label for="country" class="form-label">Select a Country:</label>
+      <select class="form-select" id="country" name="country" required>
+        {% for country in countries %}
+          <option value="{{ country }}" {% if country == selected_country %}selected{% endif %}>
+            {{ country }}
+          </option>
+        {% endfor %}
+      </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+
+  {% if statistics %}
+    <div class="table-responsive mt-4">
+      <table class="table table-striped table-hover">
+        <thead>
+          <tr>
+            <th scope="col">Customer ID</th>
+            <th scope="col">Name</th>
+            <th scope="col">Email</th>
+            <th scope="col">City</th>
+            <th scope="col"># Invoices</th>
+            <th scope="col">Total Amount</th>
+            <th scope="col">Average Amount</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for customer in statistics %}
+            <tr>
+              <td>{{ customer.customer_id }}</td>
+              <td>{{ customer.name }}</td>
+              <td>{{ customer.email }}</td>
+              <td>{{ customer.city }}</td>
+              <td>{{ customer.number_of_invoices }}</td>
+              <td>{{ customer.total_amount }}</td>
+              <td>{{ customer.average_amount }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% endif %}
+{% endblock %}
